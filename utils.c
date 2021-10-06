@@ -6,48 +6,31 @@
 /*   By: pcamaren <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/05 19:28:50 by pcamaren          #+#    #+#             */
-/*   Updated: 2021/10/05 19:29:20 by pcamaren         ###   ########.fr       */
+/*   Updated: 2021/10/06 18:46:00 by pcamaren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-char **cmd_split(char *cmd, char c)
+char	**cmd_split(char *cmd, char c)
 {
-	char	**str;
-	int	i;
-	int	j;
-	int	count;
+	int		i;
+	int		size;
+	char	**args;
 
-	j = 0;
-	count = 0;
-	while (cmd[j])
-	{
-		if (cmd[j] == c)
-		{
-			count++;
-			j++;
-		}
-	
-	}
-	str = (char **)malloc(sizeof(char *) * count + 1);
-	str[count + 1] = '\0';
 	i = 0;
-	while (i < count + 1)
+	size = 0;
+	while (cmd[i])
 	{
-		j = 0;
-		while (cmd[j] && cmd[j] != c)
-			j++;
-		str[i] = cmd_up(cmd, j);
-		i++;
-		cmd = cmd + j + 1;
+		if (cmd[i++] == c)
+			size++;
 	}
-	return (str);
+	args = (char **)malloc(sizeof(char *)  * size + 2)
 }
 
-char	*cmd_dup(char *cmd, int n)
+char	*cmd_dup(char *cmd, unsigned int n)
 {
-	char		*command;
+	char			*command;
 	unsigned int	i;
 
 	i = 0;
@@ -55,5 +38,65 @@ char	*cmd_dup(char *cmd, int n)
 	while (i < n)
 		command[i++] = *cmd++;
 	command[i] = '\0';
-	return(command);
-} 
+	return (command);
+}
+
+int	ft_strsrch(char *str, char c)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] && str[i] != c)
+		i++;
+	if (str[i] == c)
+		return (i);
+	return (-1);
+}
+
+int	ft_strncmp(char *str, char *str2, int n)
+{
+	while (n > 0 && *str && *str2 && *str == *str2)
+	{
+		str++;
+		str2++;
+		n--;
+	}
+	return (*str2 - *str);
+}
+
+char	*joinpath(char *path, char *bin)
+{
+	char	*joinedstr;
+	int		i;
+	int		j;
+	int		size;
+
+	size = ft_strsrch(path, 0) + ft_strsrch(bin, 0) + 2;
+	joinedstr = (char *)malloc(sizeof(char) * size);
+	i = 0;
+	j = 0;
+	while (path[j])
+	{
+		joinedstr[i] = path[j];
+		i++;
+		j++;
+	}
+	joinedstr[i + 1] = '/';
+	j = 0;
+	while (bin[j])
+		joinedstr[i++] = bin[j++];
+	joinedstr[i] = 0;
+	return (joinedstr);
+}
+
+void	ft_putstr(char const *s)
+{
+	int i;
+
+	i = 0;
+	while (s[i] != '\0')
+	{
+		write(1, &s[i], 1);
+		i++;
+	}
+}

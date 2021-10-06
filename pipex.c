@@ -6,7 +6,7 @@
 /*   By: pcamaren <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 17:36:47 by pcamaren          #+#    #+#             */
-/*   Updated: 2021/10/05 19:41:40 by pcamaren         ###   ########.fr       */
+/*   Updated: 2021/10/06 19:03:57 by pcamaren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,15 @@ int	main(int ac, char **av, char **env)
 		fout = ft_open(av[4], 'o');
 		if (fin < 0  || fout < 0)
 			return (-1);
-		pipex(fin, fout, av, env);
+		dup2(fin, STDIN); //redirecting infile as the input to the pipe
+		dup2(fout, STDOUT); //redirecting the outfile as the output of the pipe
+		pipex(fin, av, env);
 	}
 	return (1);
 }
 
 int	ft_open(char *file, char c)
 {
-	int	d;
-
-
 	if (c == 'i')
 	{
 		if (access(file, F_OK))
@@ -49,63 +48,74 @@ int	ft_open(char *file, char c)
 	}
 	else if (c == 'o')
 	{
-		if (access(file, W_OK))
-		{
-			write(STDERR, "Cannot write to file\n", 21);
-			return (STDIN);
-		}
-		else
-			return(open(file, O_CREAT | O_WRONLY | O_TRUNC | S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH));
+		return(open(file, O_CREAT | O_WRONLY | O_TRUNC,
+					S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH));
 	}
+	return (-1);
 }
 
-void	pipex(int fin, int fout, char **av, char **env)
+void	pipex(int fin, char **av, char **env)
 {
-	int	end[2];
-	int	status;
-	pid_t	child1;
-	pid_t	child2;
+	pid_t	child;
+	int		cmd_pipe[2]; //creating an array to feed it to the funtion pipe
 
-	pipe(end);
-	child1 = fork();
-	if (child1 < 0)
-		write(STDERR, "error\n", 5);
-	if (child1 == 0)
-		child_one(av[2], env, fin, end);
-	if (child2 < 0)
-		write(STDERR, "error\n", 5);
-	if (child2 == 0)
-		child_two(av[3], env, fout, end);
-	close(end[0]);
-	close(end[1]);
-	waitpid(child1, &status, 0);
-	waitpid(child2, &status, 0);
-}
-
-void	child_one(char *cmd, char **env, int fin, int *end)
-{
-	close(end[0]);
-	dup2(end[1], STDOUT);
-	close(end[1]);
-	dup2(fin, STDIN);
-	close(fin);
-	exec(cmd, env);
-
-}
-
-void	child_two(char *cmd, char **env, int fout, int *end)
-{
-	close(end[1]);
-	dup2(end[0], STDIN);
-	close(end[0]);
-	dup2(fout, STDOUT);
-	exec(cmd, env);
+	pipe(cmd_pipe); //calling the function pipe, that will create a pipe, this assign a fd to cmd_pipe[1] and to cmd_pipe[2]
+	child = fork(); //creating child
+	if (child == 0) //we are in the child process
+ 	{
+		close(cmd_pipe[0]); //we wont be using so we close it;
+		dup2(cmd_pipe[1], STDOUT); //redirecting
+		if (fin == STDIN)
+			exit(1);
+		exec(av[2], env);
+	}
+	else if (child > 0)
+	{
+		waitpid(child, NULL, 0);
+		close(cmd_pipe[1]);
+		dup2(cmd_pipe[0], STDIN);
+		exec(av[3], env);
+	}
+	else
+	{
+		write(STDERR, "ERROR\n", 6);
+	}
 }
 
 void	exec(char *cmd, char **env)
 {
-	char	*path;
-	char	**cmd_args;
+	char	*path; //path to the command
+	char	**args; //the args the command needs, we split the cmd str in parts
 
-	cmd_args = cmd_split(cmd, ' ');
+	args = ft_strsplit(cmd, ' ');
+	if (!args[0])
+		exit(1);
+	path = ft_path(args[0], env);
+	execve(path, args, env);
+}
+
+char	*ft_path(char *cmd, char **env)
+{
+	char	*path;
+	char	*dir;
+	char	*bin;
+	int		i;
+
+	i = 0;
+	while (env[i] && ft_strncmp(env[i], "PATH=", 5))
+		i++;
+	if (!env[i])
+		return (cmd);
+	path = env[i] + 5;
+	while (path && ft_strsrch(path, ':') > -1)
+	{
+		dir = cmd_dup(path, ft_strsrch(path, ':'));
+		bin = joinpath(dir, cmd);
+		free(dir);
+		if (access (bin, F_OK) == 0)
+			return (bin);
+		free(bin);
+		path += ft_strsrch(path, ':') + 1;
+	}
+	return (cmd);
 }
