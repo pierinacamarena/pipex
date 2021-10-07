@@ -6,7 +6,7 @@
 /*   By: pcamaren <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 17:36:47 by pcamaren          #+#    #+#             */
-/*   Updated: 2021/10/06 19:03:57 by pcamaren         ###   ########.fr       */
+/*   Updated: 2021/10/07 16:41:29 by pcamaren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,26 +96,5 @@ void	exec(char *cmd, char **env)
 
 char	*ft_path(char *cmd, char **env)
 {
-	char	*path;
-	char	*dir;
-	char	*bin;
-	int		i;
 
-	i = 0;
-	while (env[i] && ft_strncmp(env[i], "PATH=", 5))
-		i++;
-	if (!env[i])
-		return (cmd);
-	path = env[i] + 5;
-	while (path && ft_strsrch(path, ':') > -1)
-	{
-		dir = cmd_dup(path, ft_strsrch(path, ':'));
-		bin = joinpath(dir, cmd);
-		free(dir);
-		if (access (bin, F_OK) == 0)
-			return (bin);
-		free(bin);
-		path += ft_strsrch(path, ':') + 1;
-	}
-	return (cmd);
 }

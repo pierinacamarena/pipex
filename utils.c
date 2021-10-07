@@ -6,27 +6,11 @@
 /*   By: pcamaren <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/05 19:28:50 by pcamaren          #+#    #+#             */
-/*   Updated: 2021/10/06 18:46:00 by pcamaren         ###   ########.fr       */
+/*   Updated: 2021/10/07 15:46:16 by pcamaren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-char	**cmd_split(char *cmd, char c)
-{
-	int		i;
-	int		size;
-	char	**args;
-
-	i = 0;
-	size = 0;
-	while (cmd[i])
-	{
-		if (cmd[i++] == c)
-			size++;
-	}
-	args = (char **)malloc(sizeof(char *)  * size + 2)
-}
 
 char	*cmd_dup(char *cmd, unsigned int n)
 {
