@@ -6,12 +6,12 @@
 /*   By: pcamaren <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 16:45:40 by pcamaren          #+#    #+#             */
-/*   Updated: 2021/10/07 16:51:40 by pcamaren         ###   ########.fr       */
+/*   Updated: 2021/10/08 16:33:47 by pcamaren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#ifndef MAIN_H
+# define MAIN_H
 
 # include <stdlib.h>
 # include <unistd.h>
@@ -32,5 +32,14 @@ int		str_ichr (char *str, char c);
 char	*str_ndup (char *str, unsigned int n);
 char	**str_split (char *str, char sep);
 int		openfile (char *filename, int mode);
+char	**ft_malloc_words(char const *s, char c);
+void	ft_malloc_letters(char const *s, char c, char **str);
+char	**ft_strsplit(char const *s, char c);
+void	ft_bzero(void *str, size_t n);
+void	*ft_memset(void *str, int character, size_t n);
+size_t  ft_strlen(const char *str);
+char	*ft_str3join(char const *s1, char const *s2, char const *s3);
+char	*ft_strjoin(char const *s1, char const *s2);
+
 
 #endif

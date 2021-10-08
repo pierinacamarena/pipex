@@ -6,7 +6,7 @@
 /*   By: pcamaren <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 16:44:33 by pcamaren          #+#    #+#             */
-/*   Updated: 2021/10/07 17:44:06 by pcamaren         ###   ########.fr       */
+/*   Updated: 2021/10/08 16:32:48 by pcamaren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ int			ft_strncmp(const char *s1, const char *s2, size_t n)
 	i = 0;
 	while ((s1[i] || s2[i]) && i < n)
 	{
-		printf("s1 is %c, s2 is %c\n",s1[i], s2[i]);
 		if (s1[i] != s2[i])
 			return (s1[i] - s2[i]);
 		i++;
@@ -33,10 +32,15 @@ int	main (int ac, char **av, char **env)
 	int		fdout;
 	int		i;
 	char	*str;
-	int		strncmp;
-	int		strncmp2;
+	int		strncmp1;
+	char    *path;
+	char    **paths;
+	char    *command;
+	char    *cmd;
+	int     j;
 
 	str = "PATH=";
+	command = "wc";
 	i = 0;
 	if (ac == 5)
 	{
@@ -48,15 +52,24 @@ int	main (int ac, char **av, char **env)
 		printf("env is \n");
 		while (env[i])
 		{
-			printf("%s\n", env[i]);
+		    strncmp1 = ft_strncmp(env[i], str, 5);
+		    if (strncmp1 == 0)
+		        path = env[i];
 			i++;
 		}
-		printf("i is %d\n", i);
-		strncmp = ft_strncmp(env[1], str, 5);
-		printf("strncmp is %d\n", strncmp);
-		strncmp2 = ft_strncmp(env[12], str, 5);
-		printf("strncmp2 is %d\n", strncmp2);
-
+		path = path + 5;
+		paths = ft_strsplit(path, ':');
+		while (paths[i])
+		{
+		    j = ft_strlen(paths[i]) - 1;
+		    if (paths[i][j] == '/')
+		        cmd = ft_strjoin(paths[i], command);
+		    else
+		        cmd = ft_str3join(paths[i], "/", command);
+		    printf("this is paths[i] %s\n", paths[i]);
+		    printf("this is cmd: %s\n", cmd);
+		    i++;
+		}
 	}
 	else
 		write(STDERR, "Invalid number of arguments.\n", 29);
