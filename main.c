@@ -6,7 +6,7 @@
 /*   By: pcamaren <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 16:44:33 by pcamaren          #+#    #+#             */
-/*   Updated: 2021/10/08 16:32:48 by pcamaren         ###   ########.fr       */
+/*   Updated: 2021/10/08 16:54:42 by pcamaren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ int	main (int ac, char **av, char **env)
 	char    **paths;
 	char    *command;
 	char    *cmd;
-	int     j;
 
 	str = "PATH=";
 	command = "wc";
@@ -57,18 +56,17 @@ int	main (int ac, char **av, char **env)
 		        path = env[i];
 			i++;
 		}
+		printf("path is : \n%s\n", path);
 		path = path + 5;
+		printf("path is : \n%s\n", path);
 		paths = ft_strsplit(path, ':');
+		i = 0;
 		while (paths[i])
 		{
-		    j = ft_strlen(paths[i]) - 1;
-		    if (paths[i][j] == '/')
-		        cmd = ft_strjoin(paths[i], command);
-		    else
-		        cmd = ft_str3join(paths[i], "/", command);
-		    printf("this is paths[i] %s\n", paths[i]);
-		    printf("this is cmd: %s\n", cmd);
-		    i++;
+			printf("paths[%d] is:  %s\n", i, paths[i]);
+			cmd = ft_str3join(paths[i], "/", command);
+			printf("cmd is: %s\n", cmd);
+			i++;
 		}
 	}
 	else
