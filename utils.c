@@ -12,75 +12,181 @@
 
 #include "pipex.h"
 
-char	*cmd_dup(char *cmd, unsigned int n)
+int			ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	char			*command;
 	unsigned int	i;
 
 	i = 0;
-	command = (char *)malloc(sizeof(char) * n + 1);
-	while (i < n)
-		command[i++] = *cmd++;
-	command[i] = '\0';
-	return (command);
+	while ((s1[i] || s2[i]) && i < n)
+	{
+		if (s1[i] != s2[i])
+			return (s1[i] - s2[i]);
+		i++;
+	}
+		return (0);
 }
 
-int	ft_strsrch(char *str, char c)
+void	ft_free(char **str)
 {
 	int	i;
 
 	i = 0;
-	while (str[i] && str[i] != c)
-		i++;
-	if (str[i] == c)
-		return (i);
-	return (-1);
-}
-
-int	ft_strncmp(char *str, char *str2, int n)
-{
-	while (n > 0 && *str && *str2 && *str == *str2)
+	while (str[i])
 	{
-		str++;
-		str2++;
-		n--;
+		free(str[i]);
+		i++;
 	}
-	return (*str2 - *str);
+	free(str);
+	str = NULL;
 }
 
-char	*joinpath(char *path, char *bin)
+size_t		ft_strlen(const char *str)
 {
-	char	*joinedstr;
+	size_t	i;
+
+	i = 0;
+	while (str[i])
+		++i;
+	return (i);
+}
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	int		size;
+	int		i;
+	char	*str;
+
+	if (s1 == 0 || s2 == 0)
+		return (0);
+	size = ft_strlen(s1) + ft_strlen(s2);
+	str = (char *)malloc((size + 1) * sizeof(*str));
+	i = -1;
+	while (*s1)
+		str[++i] = *s1++;
+	while (*s2)
+		str[++i] = *s2++;
+	str[++i] = 0;
+	return (str);
+}
+
+char	*ft_str3join(char const *s1, char const *s2, char const *s3)
+{
+	int		size;
+	int		i;
+	char	*str;
+
+	if (s1 == 0 || s2 == 0 || s3 == 0)
+		return (0);
+	size = ft_strlen(s1) + ft_strlen(s2) + ft_strlen(s3);
+	str = (char *)malloc((size + 1) * sizeof(*str));
+	i = -1;
+	while (*s1)
+		str[++i] = *s1++;
+	while (*s2)
+		str[++i] = *s2++;
+	while (*s3)
+		str[++i] = *s3++;
+	str[++i] = 0;
+	return (str);
+}
+
+char		**ft_malloc_words(char const *s, char c)
+{
+	char	**str;
+	int		i;
+	int		size;
+
+	i = 0;
+	size = 0;
+	while (s[i])
+	{
+		if (s[i] != c)
+		{
+			size++;
+			while (s[i] != c && s[i])
+				i++;
+		}
+		else
+			i++;
+	}
+	str = (char **)malloc((size + 1) * sizeof(str));
+	if (str == 0)
+		return (0);
+	str[size] = 0;
+	return (str);
+}
+
+void		ft_malloc_letters(char const *s, char c, char **str)
+{
 	int		i;
 	int		j;
 	int		size;
 
-	size = ft_strsrch(path, 0) + ft_strsrch(bin, 0) + 2;
-	joinedstr = (char *)malloc(sizeof(char) * size);
 	i = 0;
 	j = 0;
-	while (path[j])
+	while (s[i])
 	{
-		joinedstr[i] = path[j];
-		i++;
-		j++;
+		if (s[i] != c)
+		{
+			size = 0;
+			while (s[i] != c && s[i])
+			{
+				size++;
+				i++;
+			}
+			str[j] = (char *)malloc((size + 1) * sizeof(*str));
+			if (str[j] == 0)
+				return ;
+			ft_bzero(str[j], size);
+			j++;
+		}
+		else
+			i++;
 	}
-	joinedstr[i + 1] = '/';
-	j = 0;
-	while (bin[j])
-		joinedstr[i++] = bin[j++];
-	joinedstr[i] = 0;
-	return (joinedstr);
 }
 
-void	ft_putstr(char const *s)
+char	**ft_strsplit(char const *s, char c)
 {
-	int i;
+	int		size;
+	int		i;
+	int		j;
+	char	**str;
 
+	size = 0;
 	i = 0;
-	while (s[i] != '\0')
+	if (s == 0)
+		return (0);
+	str = ft_malloc_words(s, c);
+	ft_malloc_letters(s, c, str);
+	while (s[i])
 	{
-		write(1, &s[i], 1);
-		i++;
+		if (s[i] != c)
+		{
+			j = 0;
+			while (s[i] != c && s[i])
+				str[size][j++] = s[i++];
+			str[size][j] = 0;
+			size++;
+		}
+		else
+			i++;
 	}
+	return (str);
+}
+
+void	ft_bzero(void *str, size_t n)
+{
+	ft_memset(str, 0, n);
+}
+
+void	*ft_memset(void *str, int character, size_t n)
+{
+	char			*str2;
+	unsigned char	character2;
+
+	str2 = (char *)str;
+	character2 = (unsigned char)character;
+	while (n--)
+		*str2++ = character2;
+	return (str);
 }

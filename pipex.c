@@ -12,89 +12,122 @@
 
 #include "pipex.h"
 
-int	main(int ac, char **av, char **env)
+char    *ft_path(char *arg, char **env)
 {
-	int	fin;
-	int	fout;
+    int     finder;
+    int     i;
+    int     j;
+    char    *path;
+    char    *cmd;
+    char    **path_split;
 
-	if (ac < 5)
-		write(STDERR, "TOO FEW ARGUMENTS\n", 18);
-	else if (ac > 5)
-		write(STDERR, "TOO MANY ARGUMENTS\n", 19);
-	else
+    i = 0;
+    while (env[i])
+    {
+        finder = ft_strncmp(env[i], "PATH=", 5);
+        if (finder == 0)
+            path = env[i];
+        i++;
+    }
+    path = path + 5;
+    path_split = ft_strsplit(path, ':');
+    i = 0;
+    while (path_split[i])
+    {
+        j = ft_strlen(path_split[i]) - 1;
+		if (path_split[i][j] == '/')
+		    cmd = ft_strjoin(path_split[i], arg);
+		else
+		    cmd = ft_str3join(path_split[i], "/", arg);
+		if (access(cmd, F_OK | X_OK) == 0)
+		{
+		    ft_free(path_split);
+		    return (cmd);
+		}
+		free(cmd);
+		i++;
+    }
+    ft_free(path_split);
+    return(NULL);
+}
+
+void    exec(char *cmd, char **env)
+{
+    char    **command;
+    char    *path;
+
+    command = ft_strsplit(cmd, ' ');
+	path = ft_path(command[0], env);
+	if (execve(path, command, env) == -1)
 	{
-		fin = ft_open(av[1], 'i');
-		fout = ft_open(av[4], 'o');
-		if (fin < 0  || fout < 0)
-			return (-1);
-		dup2(fin, STDIN); //redirecting infile as the input to the pipe
-		dup2(fout, STDOUT); //redirecting the outfile as the output of the pipe
-		pipex(fin, av, env);
+	    printf("command not found \n");
+	    free(path);
+	    ft_free(command);
+	    exit(1);
 	}
+}
+
+void    pipex(char **av, char **env, int fdin)
+{
+    int     end[2];
+    pid_t   child;
+
+    pipe(end);
+    child = fork();
+    if (child == 0)
+    {
+        close(end[0]);
+        dup2(end[1], STDOUT);
+    	if (fdin == STDIN)
+			exit(1);
+        exec(av[2], env);
+        close(end[1]);
+    }
+    else
+    {
+        waitpid(child, NULL, 0);
+        close(end[1]);
+		dup2(end[0], STDIN);
+		exec(av[3], env);
+		close(end[0]);
+    }
+}
+
+
+int main (int ac, char **av, char **env)
+{
+	int		fdin;
+	int		fdout;
+	int     end[2];
+	pid_t   child;
+
+	if (ac == 5)
+	{
+		fdin = openfile(av[1], INFILE);
+		fdout = openfile(av[4], OUTFILE);
+		dup2(fdin, STDIN);
+		dup2(fdout, STDOUT);
+		pipex(av, env, fdin);
+		close(fdin);
+		close(fdout);
+    }
+    else
+		write(STDERR, "Invalid number of arguments.\n", 29);
 	return (1);
 }
 
-int	ft_open(char *file, char c)
+int	openfile (char *filename, int mode)
 {
-	if (c == 'i')
+	if (mode == INFILE)
 	{
-		if (access(file, F_OK))
+		if (access(filename, F_OK))
 		{
-			write(STDERR, "File or directory not found\n", 28);
+			write(STDERR, ": No such file or directory\n", 28);
 			return (STDIN);
-		}	
-		else
-			return(open(file, O_RDONLY));
-	}
-	else if (c == 'o')
-	{
-		return(open(file, O_CREAT | O_WRONLY | O_TRUNC,
-					S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH));
-	}
-	return (-1);
-}
-
-void	pipex(int fin, char **av, char **env)
-{
-	pid_t	child;
-	int		cmd_pipe[2]; //creating an array to feed it to the funtion pipe
-
-	pipe(cmd_pipe); //calling the function pipe, that will create a pipe, this assign a fd to cmd_pipe[1] and to cmd_pipe[2]
-	child = fork(); //creating child
-	if (child == 0) //we are in the child process
- 	{
-		close(cmd_pipe[0]); //we wont be using so we close it;
-		dup2(cmd_pipe[1], STDOUT); //redirecting
-		if (fin == STDIN)
-			exit(1);
-		exec(av[2], env);
-	}
-	else if (child > 0)
-	{
-		waitpid(child, NULL, 0);
-		close(cmd_pipe[1]);
-		dup2(cmd_pipe[0], STDIN);
-		exec(av[3], env);
+		}
+		return (open(filename, O_RDONLY));
 	}
 	else
-	{
-		write(STDERR, "ERROR\n", 6);
-	}
-}
-
-void	exec(char *cmd, char **env)
-{
-	char	*path; //path to the command
-	char	**args; //the args the command needs, we split the cmd str in parts
-
-	args = ft_strsplit(cmd, ' ');
-	if (!args[0])
-		exit(1);
-	path = ft_path(args[0], env);
-	execve(path, args, env);
-}
-
-char	*ft_path(char *cmd, char **env)
-{
-
+		return (open(filename, O_CREAT | O_WRONLY | O_TRUNC,
+				S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH));
 }

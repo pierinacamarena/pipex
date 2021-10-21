@@ -13,31 +13,35 @@
 #ifndef PIPEX_H
 # define PIPEX_H
 
-#include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/wait.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <fcntl.h>
+# include <sys/wait.h>
+# include <stdio.h>
 
-#define STDIN 0
-#define STDOUT 1
-#define STDERR 2
+# define STDIN 0
+# define STDOUT 1
+# define STDERR 2
 
+# define INFILE 0
+# define OUTFILE 1
 
-int		ft_open(char *file, char c);
-void	pipex(int fd, char **ag, char **env);
-void	child_one(char *cmd, char **env, int fin, int *end);
-void	child_two(char *cmd, char **env, int fout, int *end);
-void	exec(char *cmd, char **env);
-void	ft_putstr(char const *s);
-char	*cmd_dup(char *cmd, unsigned int n);
-char	*ft_path(char *cmd, char **env);
-int		ft_strsrch(char *str, char c);
-int		ft_strncmp(char *str, char *str2, int n);
-char	*joinpath(char *path, char *bin);
-char	**ft_strsplit(char const *s, char c);
-void	ft_malloc_letters(char const *s, char c, char **str);
+char	*path_join (char *path, char *bin);
+int		str_ncmp (char *str1, char *str2, int n);
+int		str_ichr (char *str, char c);
+char	*str_ndup (char *str, unsigned int n);
+char	**str_split (char *str, char sep);
+int		openfile (char *filename, int mode);
 char	**ft_malloc_words(char const *s, char c);
+void	ft_malloc_letters(char const *s, char c, char **str);
+char	**ft_strsplit(char const *s, char c);
 void	ft_bzero(void *str, size_t n);
 void	*ft_memset(void *str, int character, size_t n);
+size_t  ft_strlen(const char *str);
+char	*ft_str3join(char const *s1, char const *s2, char const *s3);
+char	*ft_strjoin(char const *s1, char const *s2);
+void	ft_free(char **str);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
+
 
 #endif
