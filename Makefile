@@ -12,48 +12,37 @@
 
 NAME = pipex
 
-CC = clang
+SRCS = pipex.c \
+		 utils.c
 
-CFLAGS = -Wall -Wextra -Werror
+OBJS = $(SRCS:.c=.o)
 
-HEADER = pipex.h
+INCLUDES = -I./includes
 
-SRC = pipex.c utils.c
+CC = gcc
 
-OBJ = $(SRC:c=o)
+CFLAGS = -Wall -Wextra -Werror 
 
-SRCB = bonus.c utils.c
-
-OBJB = $(SRCB:c=o)
+RM = rm -f
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	@echo "\033[0;32m\n\nCompiling pipex..."
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ)
-	@echo "\n\033[0mDone !"
+bonus: re
+	@$(MAKE) fclean -C bonus
+	@$(MAKE) -C pipex_bonus
+	@cp ./pipex_bonus/pipex ./pipex
 
-%.o: %.c
-	@printf "\033[0;33mGenerating pipex objects... %-10.10s\r" $@
-	@${CC} ${CFLAGS} -c $< -o $@
+$(NAME): $(OBJS)
+	@$(CC) $(CFLAGS) $(INCLUDES) -o $(NAME) $(OBJS)
 
 clean:
-	@echo "\033[0;31m\nDeleting objects..."
-	@rm -f $(OBJ) $(OBJB)
-	@echo "\033[0m"
+	@$(MAKE) -C pipex_bonus clean
+	@$(RM) $(OBJS)
 
-fclean:
-	@echo "\033[0;31m\nDeleting objects..."
-	@rm -f $(OBJ) $(OBJB)
-	@echo "\nDeleting executable..."
-	@rm -f $(NAME)
-	@echo "\033[0m"
+fclean: clean
+	@$(MAKE) -C pipex_bonus fclean
+	@$(RM) $(NAME)
 
 re: fclean all
 
-bonus: $(OBJB)
-	@echo "\033[0;32m\n\nCompiling pipex (with bonuses)..."
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJB)
-	@echo "\n\033[0mDone !"
-
-.PHONY: clean fclean re bonus
+.PHONY: all clean fclean re
