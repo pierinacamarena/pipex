@@ -27,11 +27,11 @@
 # define OUTFILE 1
 
 char	*path_join (char *path, char *bin);
-int		str_ncmp (char *str1, char *str2, int n);
-int		str_ichr (char *str, char c);
+int	str_ncmp (char *str1, char *str2, int n);
+int	str_ichr (char *str, char c);
 char	*str_ndup (char *str, unsigned int n);
 char	**str_split (char *str, char sep);
-int		openfile (char *filename, int mode);
+int	openfile (char *filename, int mode);
 char	**ft_malloc_words(char const *s, char c);
 void	ft_malloc_letters(char const *s, char c, char **str);
 char	**ft_strsplit(char const *s, char c);
@@ -41,7 +41,7 @@ size_t  ft_strlen(const char *str);
 char	*ft_str3join(char const *s1, char const *s2, char const *s3);
 char	*ft_strjoin(char const *s1, char const *s2);
 void	ft_free(char **str);
-int		ft_strncmp(const char *s1, const char *s2, size_t n);
+int	ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*cmd_tester(char **path_split, char *arg);
-
+char	*ft_path(char *arg, char **env);
 #endif
