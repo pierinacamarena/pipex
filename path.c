@@ -40,8 +40,8 @@ char	*ft_path(char *arg, char **env)
 
 char	*cmd_tester(char **path_split, char *arg)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 	char	*cmd;
 
 	i = 0;

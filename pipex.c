@@ -30,7 +30,7 @@ void	exec(char *cmd, char **env)
 
 void	pipex(char **av, char **env, int fdin)
 {
-	int	end[2];
+	int		end[2];
 	pid_t	child;
 
 	pipe(end);
