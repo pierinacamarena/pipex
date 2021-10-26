@@ -10,13 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "includes/pipex.h"
 
 char	*ft_path(char *arg, char **env)
 {
 	int		finder;
 	int		i;
-	int		j;
 	char	*path;
 	char	*cmd;
 	char	**path_split;
@@ -31,6 +30,20 @@ char	*ft_path(char *arg, char **env)
 	}
 	path = path + 5;
 	path_split = ft_strsplit(path, ':');
+	i = 0;
+	cmd = cmd_tester(path_split, arg);
+	if (cmd)
+		return (cmd);
+	ft_free(path_split);
+	return (NULL);
+}
+
+char	*cmd_tester(char **path_split, char *arg)
+{
+	int	i;
+	int	j;
+	char	*cmd;
+
 	i = 0;
 	while (path_split[i])
 	{
@@ -47,10 +60,8 @@ char	*ft_path(char *arg, char **env)
 		free(cmd);
 		i++;
 	}
-	ft_free(path_split);
 	return (NULL);
 }
-
 
 
 void	exec(char *cmd, char **env)
