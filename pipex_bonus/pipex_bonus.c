@@ -78,6 +78,19 @@ void	pipex2(char **av, char **env, int fdin, int i)
 	}
 }
 
+void	mutiple_commands(int ac, char **av, char **env, int fdin)
+{
+	int	i;
+
+	i = 2;
+	while (i < ac - 2)
+	{
+		pipex2(av, env, fdin, i);
+		i++;
+	}
+	exec(av[i], env);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	int	fdin;
@@ -93,15 +106,7 @@ int	main(int ac, char **av, char **env)
 		if (ac == 5)
 			pipex(av, env, fdin);
 		else
-		{
-			i = 2;
-			while (i < ac - 2)
-			{
-				pipex2(av, env, fdin, i);
-				i++;
-			}
-			exec(av[i], env);
-		}
+			multiple_commands(ac, av, env, fdin);
 	}
 	else
 		write(STDERR, "Invalid number of arguments.\n", 29);
