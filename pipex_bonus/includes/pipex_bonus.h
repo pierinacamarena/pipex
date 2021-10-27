@@ -31,7 +31,8 @@ int		str_ncmp(char *str1, char *str2, int n);
 int		str_ichr(char *str, char c);
 char	*str_ndup(char *str, unsigned int n);
 char	**str_split(char *str, char sep);
-int		openfile(char *filename, int mode);
+int		openfile(char *filename);
+int		openoutfile(char *filename);
 int		main(int ac, char **av, char **env);
 char	**ft_malloc_words(char const *s, char c);
 void	ft_malloc_letters(char const *s, char c, char **str);
@@ -49,5 +50,6 @@ void	pipex(char **av, char **env, int fdin);
 void	pipex2(char **av, char **env, int fdin, int i);
 void	multipipe(int ac, char **av, char **env, int fdin);
 void	exec(char *cmd, char **env);
+void	ft_putstr(const char *str);
 
 #endif

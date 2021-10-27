@@ -36,6 +36,8 @@ void	pipex(char **av, char **env, int fdin)
 
 	pipe(end);
 	child = fork();
+	if (child == -1)
+		ft_putstr("fork failed\n");
 	if (child == 0)
 	{
 		close(end[0]);
