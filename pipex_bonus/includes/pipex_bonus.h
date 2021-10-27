@@ -5,13 +5,13 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: pcamaren <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/07 16:45:40 by pcamaren          #+#    #+#             */
-/*   Updated: 2021/10/08 16:33:47 by pcamaren         ###   ########.fr       */
+/*   Created: 2021/10/05 19:28:50 by pcamaren          #+#    #+#             */
+/*   Updated: 2021/10/07 15:46:16 by pcamaren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MAIN_H
-# define MAIN_H
+#ifndef PIPEX_BONUS_H
+# define PIPEX_BONUS_H
 
 # include <stdlib.h>
 # include <unistd.h>
@@ -26,23 +26,23 @@
 # define INFILE 0
 # define OUTFILE 1
 
-char	*path_join (char *path, char *bin);
-int		str_ncmp (char *str1, char *str2, int n);
-int		str_ichr (char *str, char c);
-char	*str_ndup (char *str, unsigned int n);
-char	**str_split (char *str, char sep);
-int		openfile (char *filename, int mode);
+char	*path_join(char *path, char *bin);
+int		str_ncmp(char *str1, char *str2, int n);
+int		str_ichr(char *str, char c);
+char	*str_ndup(char *str, unsigned int n);
+char	**str_split(char *str, char sep);
+int		openfile(char *filename, int mode);
 char	**ft_malloc_words(char const *s, char c);
 void	ft_malloc_letters(char const *s, char c, char **str);
 char	**ft_strsplit(char const *s, char c);
 void	ft_bzero(void *str, size_t n);
 void	*ft_memset(void *str, int character, size_t n);
-size_t  ft_strlen(const char *str);
+size_t	ft_strlen(const char *str);
 char	*ft_str3join(char const *s1, char const *s2, char const *s3);
 char	*ft_strjoin(char const *s1, char const *s2);
 void	ft_free(char **str);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
-char	*ft_path(char *arg, char** env);
+char	*ft_path(char *arg, char **env);
 char	*cmd_tester(char **path_split, char *arg);
 
 #endif
