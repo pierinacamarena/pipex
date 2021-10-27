@@ -80,8 +80,8 @@ int	main(int ac, char **av, char **env)
 int	openoutfile(char *filename)
 {
 	if (access(filename, F_OK))
-			return (open(filename, O_CREAT | O_WRONLY | O_TRUNC,
-					S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH));
+		return (open(filename, O_CREAT | O_WRONLY | O_TRUNC,
+				S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH));
 	else
 	{
 		if (access(filename, W_OK))
@@ -105,5 +105,15 @@ int	openfile(char *filename)
 		ft_putstr(": No such file or directory\n");
 		return (STDIN);
 	}
-	return (open(filename, O_RDONLY));
+	else
+	{
+		if (access(filename, R_OK))
+		{
+			ft_putstr("pipex: ");
+			ft_putstr(filename);
+			ft_putstr(": Permission denied\n");
+			return (-1);
+		}
+		return (open(filename, O_RDONLY));
+	}
 }
