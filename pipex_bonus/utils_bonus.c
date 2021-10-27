@@ -12,7 +12,7 @@
 
 #include "includes/pipex_bonus.h"
 
-int			ft_strncmp(const char *s1, const char *s2, size_t n)
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
 	unsigned int	i;
 
@@ -23,7 +23,7 @@ int			ft_strncmp(const char *s1, const char *s2, size_t n)
 			return (s1[i] - s2[i]);
 		i++;
 	}
-		return (0);
+	return (0);
 }
 
 void	ft_free(char **str)
@@ -40,7 +40,7 @@ void	ft_free(char **str)
 	str = NULL;
 }
 
-size_t		ft_strlen(const char *str)
+size_t	ft_strlen(const char *str)
 {
 	size_t	i;
 
@@ -90,7 +90,7 @@ char	*ft_str3join(char const *s1, char const *s2, char const *s3)
 	return (str);
 }
 
-char		**ft_malloc_words(char const *s, char c)
+char	**ft_malloc_words(char const *s, char c)
 {
 	char	**str;
 	int		i;
@@ -116,7 +116,7 @@ char		**ft_malloc_words(char const *s, char c)
 	return (str);
 }
 
-void		ft_malloc_letters(char const *s, char c, char **str)
+void	ft_malloc_letters(char const *s, char c, char **str)
 {
 	int		i;
 	int		j;
