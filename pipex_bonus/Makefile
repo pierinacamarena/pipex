@@ -1,4 +1,4 @@
-NAME = pipe
+NAME = pipex
 
 SRCS = pipex_bonus.c \
        		path_bonus.c \
