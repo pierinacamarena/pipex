@@ -62,8 +62,8 @@ int	main(int ac, char **av, char **env)
 
 	if (ac == 5)
 	{
-		fdin = openfile(av[1], INFILE);
-		fdout = openfile(av[4], OUTFILE);
+		fdin = openfile(av[1]);
+		fdout = openoutfile(av[4]);
 		if (fdout == -1)
 			return (-1);
 		dup2(fdin, STDIN);
@@ -77,35 +77,33 @@ int	main(int ac, char **av, char **env)
 	return (1);
 }
 
-int	openfile(char *filename, int mode)
+int	openoutfile(char *filename)
 {
-	if (mode == INFILE)
+	if (access(filename, F_OK))
+			return (open(filename, O_CREAT | O_WRONLY | O_TRUNC,
+					S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH));
+	else
 	{
-		if (access(filename, F_OK))
+		if (access(filename, W_OK))
 		{
 			ft_putstr("pipex: ");
 			ft_putstr(filename);
-			ft_putstr(": No such file or directory\n");
-			return (STDIN);
+			ft_putstr(": Permission denied\n");
+			return (-1);
 		}
-		return (open(filename, O_RDONLY));
+		return (open(filename, O_CREAT | O_WRONLY | O_TRUNC,
+				S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH));
 	}
-	else
+}
+
+int	openfile(char *filename)
+{
+	if (access(filename, F_OK))
 	{
-		if (access(filename, F_OK))
-			return (open(filename, O_CREAT | O_WRONLY | O_TRUNC,
-					S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH));
-		else
-		{
-			if (access(filename, W_OK))
-			{
-				ft_putstr("pipex: ");
-				ft_putstr(filename);
-				ft_putstr(": Permission denied\n");
-				return (-1);
-			}
-			return (open(filename, O_CREAT | O_WRONLY | O_TRUNC,
-					S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH));
-		}
+		ft_putstr("pipex: ");
+		ft_putstr(filename);
+		ft_putstr(": No such file or directory\n");
+		return (STDIN);
 	}
+	return (open(filename, O_RDONLY));
 }

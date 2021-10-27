@@ -28,7 +28,8 @@
 
 int		str_ncmp(char *str1, char *str2, int n);
 int		str_ichr(char *str, char c);
-int		openfile(char *filename, int mode);
+int		openfile(char *filename);
+int		openoutfile(char *filename);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*path_join(char *path, char *bin);
 char	*str_ndup(char *str, unsigned int n);
