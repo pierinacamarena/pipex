@@ -38,6 +38,7 @@ void	ft_malloc_letters(char const *s, char c, char **str);
 char	**ft_strsplit(char const *s, char c);
 void	ft_bzero(void *str, size_t n);
 void	*ft_memset(void *str, int character, size_t n);
+void	ft_putstr(const char *str);
 size_t	ft_strlen(const char *str);
 char	*ft_str3join(char const *s1, char const *s2, char const *s3);
 char	*ft_strjoin(char const *s1, char const *s2);

@@ -21,7 +21,8 @@ void	exec(char *cmd, char **env)
 	path = ft_path(command[0], env);
 	if (execve(path, command, env) == -1)
 	{
-		printf("command not found \n");
+		ft_putstr(command[0]);
+		ft_putstr(": command not found \n");
 		free(path);
 		ft_free(command);
 		exit(1);
@@ -63,6 +64,8 @@ int	main(int ac, char **av, char **env)
 	{
 		fdin = openfile(av[1], INFILE);
 		fdout = openfile(av[4], OUTFILE);
+		if (fdout == -1)
+			return (-1);
 		dup2(fdin, STDIN);
 		dup2(fdout, STDOUT);
 		pipex(av, env, fdin);
@@ -80,12 +83,29 @@ int	openfile(char *filename, int mode)
 	{
 		if (access(filename, F_OK))
 		{
-			write(STDERR, ": No such file or directory\n", 28);
+			ft_putstr("pipex: ");
+			ft_putstr(filename);
+			ft_putstr(": No such file or directory\n");
 			return (STDIN);
 		}
 		return (open(filename, O_RDONLY));
 	}
 	else
-		return (open(filename, O_CREAT | O_WRONLY | O_TRUNC,
-				S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH));
+	{
+		if (access(filename, F_OK))
+			return (open(filename, O_CREAT | O_WRONLY | O_TRUNC,
+					S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH));
+		else
+		{
+			if (access(filename, W_OK))
+			{
+				ft_putstr("pipex: ");
+				ft_putstr(filename);
+				ft_putstr(": Permission denied\n");
+				return (-1);
+			}
+			return (open(filename, O_CREAT | O_WRONLY | O_TRUNC,
+					S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH));
+		}
+	}
 }

@@ -12,6 +12,18 @@
 
 #include "includes/pipex.h"
 
+void	ft_putstr(const char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] != '\0')
+	{
+		write(2, &str[i], 1);
+		i++;
+	}
+}
+
 size_t	ft_strlen(const char *str)
 {
 	size_t	i;
