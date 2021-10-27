@@ -42,6 +42,7 @@ char	*ft_str3join(char const *s1, char const *s2, char const *s3);
 char	*ft_strjoin(char const *s1, char const *s2);
 void	ft_free(char **str);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
-
+char	*ft_path(char *arg, char** env);
+char	*cmd_tester(char **path_split, char *arg);
 
 #endif
