@@ -54,48 +54,11 @@ void	pipex(char **av, char **env, int fdin)
 	}
 }
 
-void	pipex2(char **av, char **env, int fdin, int i)
-{
-	int		end[2];
-	pid_t	child;
-
-	pipe(end);
-	child = fork();
-	if (child == 0)
-	{
-		close(end[0]);
-		dup2(end[1], STDOUT);
-		if (fdin == STDIN)
-			exit(1);
-		exec(av[i], env);
-		close(end[1]);
-	}
-	else
-	{
-		waitpid(child, NULL, 0);
-		close(end[1]);
-		dup2(end[0], STDIN);
-	}
-}
-
-void	mutiple_commands(int ac, char **av, char **env, int fdin)
-{
-	int	i;
-
-	i = 2;
-	while (i < ac - 2)
-	{
-		pipex2(av, env, fdin, i);
-		i++;
-	}
-	exec(av[i], env);
-}
-
 int	main(int ac, char **av, char **env)
 {
+	int	i;
 	int	fdin;
 	int	fdout;
-	int	i;
 
 	if (ac >= 5)
 	{
@@ -106,7 +69,12 @@ int	main(int ac, char **av, char **env)
 		if (ac == 5)
 			pipex(av, env, fdin);
 		else
-			multiple_commands(ac, av, env, fdin);
+		{
+			i = 2;
+			while (i < ac - 2)
+				pipex2(av, env, fdin, i++);
+			exec(av[i], env);
+		}
 	}
 	else
 		write(STDERR, "Invalid number of arguments.\n", 29);
