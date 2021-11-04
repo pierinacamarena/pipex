@@ -25,7 +25,7 @@ void	exec(char *cmd, char **env)
 		ft_putstr(": command not found \n");
 		free(path);
 		ft_free(command);
-		exit(1);
+		exit(127);
 	}
 }
 
