@@ -12,16 +12,19 @@
 
 NAME = pipex
 
-SRCS = pipex_bonus.c \
-       		path_bonus.c \
-		ft_strsplitbonus.c \
-		basic_functionsbonus.c \
-		multipipe.c \
-		utils_bonus.c
+SRCS = src/pipex_bonus.c \
+       		src/path_bonus.c \
+		src/ft_strsplitbonus.c \
+		src/basic_functionsbonus.c \
+		src/multipipe.c \
+		src/cmd_splitbonus.c \
+		src/cmdsplit_utilsbonus.c \
+		src/split_utilsbonus.c \
+		src/utils_bonus.c
 
 OBJS = $(SRCS:.c=.o)
 
-CC = gcc
+CC = clang
 
 CFLAGS = -Wall -Wextra -Werror 
 

@@ -26,6 +26,13 @@
 # define INFILE 0
 # define OUTFILE 1
 
+typedef struct s_splitter {
+	int		len;
+	int		i;
+	int		j;
+	int		count;
+}	t_splitter;
+
 char	*path_join(char *path, char *bin);
 int		str_ncmp(char *str1, char *str2, int n);
 int		str_ichr(char *str, char c);
@@ -51,5 +58,13 @@ void	pipex2(char **av, char **env, int fdin, int i);
 void	multipipe(int ac, char **av, char **env, int fdin);
 void	exec(char *cmd, char **env);
 void	ft_putstr(const char *str);
-
+char	**cmd_split(const char *str);
+char	**cmd_malloc(char *str, char **cmd, t_splitter *split);
+int		ft_len(char const *s, char c, int i);
+void	word_count(const char *str, int *i, int *count);
+int		ft_count(const char *str);
+void	single_quota(char *str, char **cmd, t_splitter *split);
+void	double_quota(char *str, char **cmd, t_splitter *split);
+void	space_case(char *str, char **cmd, t_splitter *split);
+void	*ft_calloc(size_t count, size_t size);
 #endif
