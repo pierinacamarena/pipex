@@ -67,7 +67,10 @@ int	main(int ac, char **av, char **env)
 		fdin = openfile(av[1]);
 		fdout = openoutfile(av[4]);
 		if (fdout == -1)
+		{
+			exit(1);
 			return (-1);
+		}
 		dup2(fdin, STDIN);
 		dup2(fdout, STDOUT);
 		pipex(av, env, fdin);
