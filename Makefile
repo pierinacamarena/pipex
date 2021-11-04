@@ -12,17 +12,20 @@
 
 NAME = pipex
 
-SRCS = pipex.c \
-		 utils.c \
-		 ft_strsplit.c \
-		 basic_functions.c \
-		 path.c
+SRCS = src/pipex.c \
+		 src/utils.c \
+		 src/ft_strsplit.c \
+		 src/basic_functions.c \
+		 src/cmd_split.c \
+		 src/cmdsplit_utils.c \
+		 src/split_utils.c \
+		 src/path.c
 
 OBJS = $(SRCS:.c=.o)
 
 INCLUDES = -I./includes
 
-CC = gcc
+CC = clang
 
 CFLAGS = -Wall -Wextra -Werror 
 
