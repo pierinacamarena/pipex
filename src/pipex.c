@@ -17,8 +17,18 @@ void	exec(char *cmd, char **env)
 	char	**command;
 	char	*path;
 
+	if (!cmd)
+		exit(1);
 	command = cmd_split(cmd);
 	path = ft_path(command[0], env);
+	if (path == NULL)
+	{
+		ft_putstr(command[0]);
+		ft_putstr(": command not found \n");
+		free(path);
+		ft_free(command);
+		exit(127);
+	}
 	if (execve(path, command, env) == -1)
 	{
 		ft_putstr(command[0]);

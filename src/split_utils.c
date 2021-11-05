@@ -22,3 +22,19 @@ void	*ft_calloc(size_t count, size_t size)
 	ft_bzero(copy, size * count);
 	return (copy);
 }
+
+int	null_checker_special(char **str)
+{
+	int	len;
+
+	len = 0;
+	while (str[len])
+	{
+		if (str[len] == NULL)
+			return (1);
+		len++;
+	}
+	if (str[len] == NULL)
+		return (1);
+	return (0);
+}
