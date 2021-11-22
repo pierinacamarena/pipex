@@ -32,10 +32,12 @@ void	exec(char *cmd, char **env)
 void	pipex(char **av, char **env, int fdin)
 {
 	int		end[2];
+	int		pipex;
 	pid_t	child;
 
-	pipe(end);
+	pipex = pipe(end);
 	child = fork();
+	error_manager(pipex, child);
 	if (child == 0)
 	{
 		close(end[0]);
@@ -47,11 +49,11 @@ void	pipex(char **av, char **env, int fdin)
 	}
 	else
 	{
-		waitpid(child, NULL, 0);
 		close(end[1]);
 		dup2(end[0], STDIN);
 		exec(av[3], env);
 		close(end[0]);
+		waitpid(child, NULL, 0);
 	}
 }
 

@@ -67,4 +67,5 @@ void	single_quota(char *str, char **cmd, t_splitter *split);
 void	double_quota(char *str, char **cmd, t_splitter *split);
 void	space_case(char *str, char **cmd, t_splitter *split);
 void	*ft_calloc(size_t count, size_t size);
+void	error_manager(int pipex, pid_t child);
 #endif

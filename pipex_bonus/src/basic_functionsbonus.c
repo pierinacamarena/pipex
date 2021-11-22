@@ -12,6 +12,20 @@
 
 #include "../includes/pipex_bonus.h"
 
+void	error_manager(int pipex, pid_t child)
+{
+	if (pipex == -1)
+	{
+		ft_putstr("pipe failed \n");
+		exit (1);
+	}
+	if (child == -1)
+	{
+		ft_putstr("fork failed\n");
+		exit (1);
+	}
+}
+
 void	ft_putstr(const char *str)
 {
 	int	i;
