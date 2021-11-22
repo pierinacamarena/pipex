@@ -79,3 +79,17 @@ char	*ft_str3join(char const *s1, char const *s2, char const *s3)
 	str[++i] = 0;
 	return (str);
 }
+
+void	error_manager(int pipex, pid_t child)
+{
+	if (pipex == -1)
+	{
+		ft_putstr("pipe failed \n");
+		exit (1);
+	}
+	if (child == -1)
+	{
+		ft_putstr("fork failed\n");
+		exit (1);
+	}
+}

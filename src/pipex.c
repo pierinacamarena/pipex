@@ -47,10 +47,7 @@ void	pipex(char **av, char **env, int fdin)
 
 	pipex = pipe(end);
 	child = fork();
-	if (child == -1)
-		ft_putstr("fork failed\n");
-	if (pipex == -1)
-		exit(1);
+	error_manager(pipex, child);
 	if (child == 0)
 	{
 		close(end[0]);
@@ -62,7 +59,6 @@ void	pipex(char **av, char **env, int fdin)
 	}
 	else
 	{
-	//	waitpid(child, NULL, 0);
 		close(end[1]);
 		dup2(end[0], STDIN);
 		exec(av[3], env);
